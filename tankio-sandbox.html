@@ -13240,7 +13240,7 @@ var _user$project$View$pause_view = function (model) {
 															_0: A5(
 																_user$project$View$tr_input,
 																model,
-																'Bullet Inertia Ratio (0~1)',
+																'Bullet Inertia Ratio ',
 																function (_) {
 																	return _.bullet_inertia_ratio;
 																},
@@ -13521,12 +13521,8 @@ var _user$project$View$draw_grid = function (_p5) {
 	var h = _p8._1;
 	var row_view = A2(
 		_elm_lang$core$List$map,
-		function (n) {
-			return A2(
-				_evancz$elm_graphics$Collage$traced,
-				_evancz$elm_graphics$Collage$solid(_elm_lang$core$Color$darkGrey),
-				n);
-		},
+		_evancz$elm_graphics$Collage$traced(
+			_evancz$elm_graphics$Collage$solid(_elm_lang$core$Color$darkGrey)),
 		A2(
 			_elm_lang$core$List$map,
 			function (n) {
@@ -13543,12 +13539,8 @@ var _user$project$View$draw_grid = function (_p5) {
 				row)));
 	var col_view = A2(
 		_elm_lang$core$List$map,
-		function (n) {
-			return A2(
-				_evancz$elm_graphics$Collage$traced,
-				_evancz$elm_graphics$Collage$solid(_elm_lang$core$Color$darkGrey),
-				n);
-		},
+		_evancz$elm_graphics$Collage$traced(
+			_evancz$elm_graphics$Collage$solid(_elm_lang$core$Color$darkGrey)),
 		A2(
 			_elm_lang$core$List$map,
 			function (n) {
@@ -13966,7 +13958,7 @@ var _user$project$Update$update_player = function (model) {
 	var dy = _p28._1;
 	var decay = 1 - dt;
 	var new_v = function (n) {
-		return {ctor: '_Tuple2', _0: ((vx * decay) + (new_ax * dt)) / n, _1: ((vy * decay) + (new_ay * dt)) / n};
+		return {ctor: '_Tuple2', _0: ((vx * decay) + (ax * dt)) / n, _1: ((vy * decay) + (ay * dt)) / n};
 	}(
 		A2(
 			_elm_lang$core$Basics$max,
@@ -14031,7 +14023,9 @@ var _user$project$Update$update = F2(
 					if (_p35.ctor === 'Ok') {
 						return _elm_lang$core$Native_Utils.update(
 							player,
-							{r: _p35._0});
+							{
+								r: A2(_elm_lang$core$Basics$max, 0, _p35._0)
+							});
 					} else {
 						return player;
 					}
@@ -14050,7 +14044,9 @@ var _user$project$Update$update = F2(
 					if (_p36.ctor === 'Ok') {
 						return _elm_lang$core$Native_Utils.update(
 							player,
-							{v_max: _p36._0});
+							{
+								v_max: A2(_elm_lang$core$Basics$max, 1.0e-3, _p36._0)
+							});
 					} else {
 						return player;
 					}
@@ -14069,7 +14065,9 @@ var _user$project$Update$update = F2(
 					if (_p37.ctor === 'Ok') {
 						return _elm_lang$core$Native_Utils.update(
 							player,
-							{a_max: _p37._0});
+							{
+								a_max: A2(_elm_lang$core$Basics$max, 1.0e-3, _p37._0)
+							});
 					} else {
 						return player;
 					}
@@ -14088,7 +14086,9 @@ var _user$project$Update$update = F2(
 					if (_p38.ctor === 'Ok') {
 						return _elm_lang$core$Native_Utils.update(
 							player,
-							{cd_max: _p38._0});
+							{
+								cd_max: A2(_elm_lang$core$Basics$max, 1.0e-3, _p38._0)
+							});
 					} else {
 						return player;
 					}
@@ -14107,7 +14107,9 @@ var _user$project$Update$update = F2(
 					if (_p39.ctor === 'Ok') {
 						return _elm_lang$core$Native_Utils.update(
 							player,
-							{bullet_r: _p39._0});
+							{
+								bullet_r: A2(_elm_lang$core$Basics$max, 0, _p39._0)
+							});
 					} else {
 						return player;
 					}
@@ -14126,7 +14128,9 @@ var _user$project$Update$update = F2(
 					if (_p40.ctor === 'Ok') {
 						return _elm_lang$core$Native_Utils.update(
 							player,
-							{bullet_v: _p40._0});
+							{
+								bullet_v: A2(_elm_lang$core$Basics$max, 1.0e-3, _p40._0)
+							});
 					} else {
 						return player;
 					}
@@ -14145,7 +14149,9 @@ var _user$project$Update$update = F2(
 					if (_p41.ctor === 'Ok') {
 						return _elm_lang$core$Native_Utils.update(
 							player,
-							{bullet_max: _p41._0});
+							{
+								bullet_max: A2(_elm_lang$core$Basics$max, 0, _p41._0)
+							});
 					} else {
 						return player;
 					}
@@ -14164,7 +14170,9 @@ var _user$project$Update$update = F2(
 					if (_p42.ctor === 'Ok') {
 						return _elm_lang$core$Native_Utils.update(
 							player,
-							{bullet_lifespan: _p42._0});
+							{
+								bullet_lifespan: A2(_elm_lang$core$Basics$max, 0, _p42._0)
+							});
 					} else {
 						return player;
 					}
@@ -14183,7 +14191,12 @@ var _user$project$Update$update = F2(
 					if (_p43.ctor === 'Ok') {
 						return _elm_lang$core$Native_Utils.update(
 							player,
-							{bullet_spread_ratio: _p43._0});
+							{
+								bullet_spread_ratio: A2(
+									_elm_lang$core$Basics$max,
+									0,
+									A2(_elm_lang$core$Basics$min, 1, _p43._0))
+							});
 					} else {
 						return player;
 					}
@@ -14245,7 +14258,9 @@ var _user$project$Update$update = F2(
 						ctor: '_Tuple2',
 						_0: _elm_lang$core$Native_Utils.update(
 							model,
-							{minion_max: _p45._0}),
+							{
+								minion_max: A2(_elm_lang$core$Basics$max, 0, _p45._0)
+							}),
 						_1: _elm_lang$core$Platform_Cmd$none
 					};
 				} else {
@@ -14258,7 +14273,9 @@ var _user$project$Update$update = F2(
 					if (_p46.ctor === 'Ok') {
 						return _elm_lang$core$Native_Utils.update(
 							minion,
-							{r: _p46._0});
+							{
+								r: A2(_elm_lang$core$Basics$max, 0, _p46._0)
+							});
 					} else {
 						return minion;
 					}
@@ -14277,7 +14294,9 @@ var _user$project$Update$update = F2(
 					if (_p47.ctor === 'Ok') {
 						return _elm_lang$core$Native_Utils.update(
 							minion,
-							{v_max: _p47._0});
+							{
+								v_max: A2(_elm_lang$core$Basics$max, 1.0e-3, _p47._0)
+							});
 					} else {
 						return minion;
 					}
@@ -14296,7 +14315,9 @@ var _user$project$Update$update = F2(
 					if (_p48.ctor === 'Ok') {
 						return _elm_lang$core$Native_Utils.update(
 							minion,
-							{cd_max: _p48._0});
+							{
+								cd_max: A2(_elm_lang$core$Basics$max, 1.0e-3, _p48._0)
+							});
 					} else {
 						return minion;
 					}
@@ -14315,7 +14336,9 @@ var _user$project$Update$update = F2(
 					if (_p49.ctor === 'Ok') {
 						return _elm_lang$core$Native_Utils.update(
 							minion,
-							{bullet_r: _p49._0});
+							{
+								bullet_r: A2(_elm_lang$core$Basics$max, 0, _p49._0)
+							});
 					} else {
 						return minion;
 					}
@@ -14334,7 +14357,9 @@ var _user$project$Update$update = F2(
 					if (_p50.ctor === 'Ok') {
 						return _elm_lang$core$Native_Utils.update(
 							minion,
-							{bullet_v: _p50._0});
+							{
+								bullet_v: A2(_elm_lang$core$Basics$max, 1.0e-3, _p50._0)
+							});
 					} else {
 						return minion;
 					}
@@ -14353,7 +14378,9 @@ var _user$project$Update$update = F2(
 					if (_p51.ctor === 'Ok') {
 						return _elm_lang$core$Native_Utils.update(
 							minion,
-							{bullet_max: _p51._0});
+							{
+								bullet_max: A2(_elm_lang$core$Basics$max, 0, _p51._0)
+							});
 					} else {
 						return minion;
 					}
@@ -14372,7 +14399,9 @@ var _user$project$Update$update = F2(
 					if (_p52.ctor === 'Ok') {
 						return _elm_lang$core$Native_Utils.update(
 							minion,
-							{bullet_lifespan: _p52._0});
+							{
+								bullet_lifespan: A2(_elm_lang$core$Basics$max, 0, _p52._0)
+							});
 					} else {
 						return minion;
 					}
@@ -14391,7 +14420,12 @@ var _user$project$Update$update = F2(
 					if (_p53.ctor === 'Ok') {
 						return _elm_lang$core$Native_Utils.update(
 							minion,
-							{bullet_spread_ratio: _p53._0});
+							{
+								bullet_spread_ratio: A2(
+									_elm_lang$core$Basics$max,
+									0,
+									A2(_elm_lang$core$Basics$min, 1, _p53._0))
+							});
 					} else {
 						return minion;
 					}
@@ -14532,20 +14566,16 @@ var _user$project$Update$update = F2(
 				var new_player = _elm_lang$core$Native_Utils.update(
 					player,
 					{a: new_a});
-				return new_paused ? {
+				return {
 					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
+					_0: new_paused ? _elm_lang$core$Native_Utils.update(
 						model,
 						{
 							minions: {ctor: '[]'},
 							player_bullets: {ctor: '[]'},
 							minion_bullets: {ctor: '[]'},
 							paused: new_paused
-						}),
-					_1: _elm_lang$core$Platform_Cmd$none
-				} : {
-					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
+						}) : _elm_lang$core$Native_Utils.update(
 						model,
 						{player: new_player, paused: new_paused}),
 					_1: _elm_lang$core$Platform_Cmd$none
