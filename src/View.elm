@@ -85,15 +85,13 @@ draw_grid {window,grid} =
       row 
         |> List.map ( \n -> n - h/2 )
         |> List.map ( \n -> segment (-w/2,n) (w/2,n) )
-        |> List.map ( \n -> traced (solid Color.darkGrey) n)
-        -- |> List.map ( \n -> alpha 0.2 n)
+        |> List.map ( traced (solid Color.darkGrey) )
 
     col_view = 
       col 
         |> List.map ( \n -> n - w/2 )
         |> List.map ( \n -> segment (n,-h/2) (n,h/2) )
-        |> List.map ( \n -> traced (solid Color.darkGrey) n)
-        -- |> List.map ( \n -> alpha 0.2 n)
+        |> List.map ( traced (solid Color.darkGrey) )
   in
     row_view ++ col_view
 
@@ -231,7 +229,7 @@ pause_view model =
       , tr_input model "Bullet Num" .bullet_max PlayerBulletMax MinionBulletMax
       , tr_input model "Bullet lifespan (sec)" .bullet_lifespan PlayerBulletLifespan MinionBulletLifespan
       , tr_input model "Bullet Spread Ratio (0~1)" .bullet_spread_ratio PlayerBulletSpreadRatio MinionBulletSpreadRatio
-      , tr_input model "Bullet Inertia Ratio (0~1)" .bullet_inertia_ratio PlayerBulletInertiaRatio MinionBulletInertiaRatio
+      , tr_input model "Bullet Inertia Ratio " .bullet_inertia_ratio PlayerBulletInertiaRatio MinionBulletInertiaRatio
       , tr_checkbox model "Bullet Penetrate" .bullet_penetrate PlayerBulletPenetrate MinionBulletPenetrate
       , tr_checkbox model "Invincible" .invincible PlayerInvincible MinionInvincible
       , tr [] []

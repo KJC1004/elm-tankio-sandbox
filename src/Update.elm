@@ -17,7 +17,7 @@ update msg model =
         player = model.player
         new_player =
           case String.toFloat str of
-            Ok val -> {player | r=val}
+            Ok val -> {player | r = max 0 val}
             Err error -> player
       in
         ({model | player=new_player}, Cmd.none)
@@ -26,7 +26,7 @@ update msg model =
         player = model.player
         new_player =
           case String.toFloat str of
-            Ok val -> {player | v_max=val}
+            Ok val -> {player | v_max = max 0.001 val}
             Err error -> player
       in
         ({model | player=new_player}, Cmd.none)
@@ -35,7 +35,7 @@ update msg model =
         player = model.player
         new_player =
           case String.toFloat str of
-            Ok val -> {player | a_max=val}
+            Ok val -> {player | a_max = max 0.001 val}
             Err error -> player
       in
         ({model | player=new_player}, Cmd.none)
@@ -44,7 +44,7 @@ update msg model =
         player = model.player
         new_player =
           case String.toFloat str of
-            Ok val -> {player | cd_max=val}
+            Ok val -> {player | cd_max = max 0.001 val}
             Err error -> player
       in
         ({model | player=new_player}, Cmd.none)
@@ -53,7 +53,7 @@ update msg model =
         player = model.player
         new_player =
           case String.toFloat str of
-            Ok val -> {player | bullet_r=val}
+            Ok val -> {player | bullet_r = max 0 val}
             Err error -> player
       in
         ({model | player=new_player}, Cmd.none)
@@ -62,7 +62,7 @@ update msg model =
         player = model.player
         new_player =
           case String.toFloat str of
-            Ok val -> {player | bullet_v=val}
+            Ok val -> {player | bullet_v= max 0.001 val}
             Err error -> player
       in
         ({model | player=new_player}, Cmd.none)
@@ -71,7 +71,7 @@ update msg model =
         player = model.player
         new_player =
           case String.toInt str of
-            Ok val -> {player | bullet_max=val}
+            Ok val -> {player | bullet_max = max 0 val}
             Err error -> player
       in
         ({model | player=new_player}, Cmd.none)
@@ -80,7 +80,7 @@ update msg model =
         player = model.player
         new_player =
           case String.toFloat str of
-            Ok val -> {player | bullet_lifespan=val}
+            Ok val -> {player | bullet_lifespan = max 0 val}
             Err error -> player
       in
         ({model | player=new_player}, Cmd.none)
@@ -89,7 +89,7 @@ update msg model =
         player = model.player
         new_player =
           case String.toFloat str of
-            Ok val -> {player | bullet_spread_ratio=val}
+            Ok val -> {player | bullet_spread_ratio = max 0 <| min 1 val}
             Err error -> player
       in
         ({model | player=new_player}, Cmd.none)
@@ -117,14 +117,14 @@ update msg model =
     
     MinionMax str -> 
       case String.toInt str of
-        Ok val -> ({model | minion_max=val}, Cmd.none)
+        Ok val -> ({model | minion_max = max 0 val}, Cmd.none)
         Err error -> (model, Cmd.none)
     MinionR str -> 
       let 
         minion = model.minion
         new_minion =
           case String.toFloat str of
-            Ok val -> {minion | r=val}
+            Ok val -> {minion | r = max 0 val}
             Err error -> minion
       in
         ({model | minion=new_minion}, Cmd.none)
@@ -133,7 +133,7 @@ update msg model =
         minion = model.minion
         new_minion =
           case String.toFloat str of
-            Ok val -> {minion | v_max=val}
+            Ok val -> {minion | v_max= max 0.001 val}
             Err error -> minion
       in
         ({model | minion=new_minion}, Cmd.none)
@@ -142,7 +142,7 @@ update msg model =
         minion = model.minion
         new_minion =
           case String.toFloat str of
-            Ok val -> {minion | cd_max=val}
+            Ok val -> {minion | cd_max = max 0.001 val}
             Err error -> minion
       in
         ({model | minion=new_minion}, Cmd.none)
@@ -151,7 +151,7 @@ update msg model =
         minion = model.minion
         new_minion =
           case String.toFloat str of
-            Ok val -> {minion | bullet_r=val}
+            Ok val -> {minion | bullet_r = max 0 val}
             Err error -> minion
       in
         ({model | minion=new_minion}, Cmd.none)
@@ -160,7 +160,7 @@ update msg model =
         minion = model.minion
         new_minion =
           case String.toFloat str of
-            Ok val -> {minion | bullet_v=val}
+            Ok val -> {minion | bullet_v = max 0.001 val}
             Err error -> minion
       in
         ({model | minion=new_minion}, Cmd.none)
@@ -169,7 +169,7 @@ update msg model =
         minion = model.minion
         new_minion =
           case String.toInt str of
-            Ok val -> {minion | bullet_max=val}
+            Ok val -> {minion | bullet_max = max 0 val}
             Err error -> minion
       in
         ({model | minion=new_minion}, Cmd.none)
@@ -178,7 +178,7 @@ update msg model =
         minion = model.minion
         new_minion =
           case String.toFloat str of
-            Ok val -> {minion | bullet_lifespan=val}
+            Ok val -> {minion | bullet_lifespan = max 0 val}
             Err error -> minion
       in
         ({model | minion=new_minion}, Cmd.none)
@@ -187,7 +187,7 @@ update msg model =
         minion = model.minion
         new_minion =
           case String.toFloat str of
-            Ok val -> {minion | bullet_spread_ratio=val}
+            Ok val -> {minion | bullet_spread_ratio = max 0 <| min 1 val}
             Err error -> minion
       in
         ({model | minion=new_minion}, Cmd.none)
@@ -196,7 +196,7 @@ update msg model =
         minion = model.minion
         new_minion =
           case String.toFloat str of
-            Ok val -> {minion | bullet_inertia_ratio=val}
+            Ok val -> {minion | bullet_inertia_ratio = val}
             Err error -> minion
       in
         ({model | minion=new_minion}, Cmd.none)
@@ -250,22 +250,20 @@ update msg model =
 
         new_player = {player | a=new_a}
       in
-        if new_paused then
-          ( { model 
+        ( if new_paused then 
+            { model 
                 | minions = []
                 , player_bullets = []
                 , minion_bullets = []
                 , paused = new_paused
             }
-          , Cmd.none
-          )
-        else
-          ( { model 
+          else 
+            { model 
                 | player=new_player
                 , paused=new_paused
             }
-          , Cmd.none
-          )
+        , Cmd.none
+        )
 
     KeyUp code ->
       let 
@@ -422,7 +420,7 @@ update_player model =
 
     new_v = 
       ( max v_max (sqrt (vx^2+vy^2)) ) / v_max
-        |> (\n -> ((vx*decay+new_ax*dt)/n, (vy*decay+new_ay*dt)/n))
+        |> (\n -> ((vx*decay+ax*dt)/n, (vy*decay+ay*dt)/n))
 
     temp_cd = cd-dt
     new_cd = 
