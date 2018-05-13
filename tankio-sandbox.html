@@ -12680,6 +12680,7 @@ var _user$project$Model$init_gameobj = {
 	v: {ctor: '_Tuple2', _0: 0, _1: 0},
 	a: {ctor: '_Tuple2', _0: 0, _1: 0},
 	r: 3,
+	hp: 9,
 	angle: 0,
 	cd: 0,
 	v_max: 30,
@@ -12763,7 +12764,9 @@ var _user$project$Model$GameObj = function (a) {
 														return function (o) {
 															return function (p) {
 																return function (q) {
-																	return {pos: a, v: b, a: c, angle: d, cd: e, r: f, v_max: g, a_max: h, cd_max: i, bullet_r: j, bullet_v: k, bullet_max: l, bullet_lifespan: m, bullet_spread_ratio: n, bullet_inertia_ratio: o, bullet_penetrate: p, invincible: q};
+																	return function (r) {
+																		return {pos: a, v: b, a: c, angle: d, cd: e, r: f, hp: g, v_max: h, a_max: i, cd_max: j, bullet_r: k, bullet_v: l, bullet_max: m, bullet_lifespan: n, bullet_spread_ratio: o, bullet_inertia_ratio: p, bullet_penetrate: q, invincible: r};
+																	};
 																};
 															};
 														};
@@ -12781,9 +12784,9 @@ var _user$project$Model$GameObj = function (a) {
 		};
 	};
 };
-var _user$project$Model$Bullet = F4(
-	function (a, b, c, d) {
-		return {pos: a, v: b, r: c, lifespan: d};
+var _user$project$Model$Bullet = F5(
+	function (a, b, c, d, e) {
+		return {pos: a, v: b, r: c, lifespan: d, hp: e};
 	});
 var _user$project$View$tableStyles = {
 	ctor: '::',
@@ -13374,10 +13377,14 @@ var _user$project$View$draw_minion = F2(
 				{width: 0.3 * unit});
 		}(
 			_evancz$elm_graphics$Collage$solid(_elm_lang$core$Color$black));
+		var hp = minion.hp;
+		var cd_max = minion.cd_max;
+		var cd = minion.cd;
 		var _p0 = minion.pos;
 		var x = _p0._0;
 		var y = _p0._1;
 		var r = minion.r;
+		var r_u = r * unit;
 		return A2(
 			_evancz$elm_graphics$Collage$move,
 			{ctor: '_Tuple2', _0: x * unit, _1: y * unit},
@@ -13389,45 +13396,55 @@ var _user$project$View$draw_minion = F2(
 						ctor: '::',
 						_0: A2(
 							_evancz$elm_graphics$Collage$moveY,
-							r * unit,
+							r_u,
 							A2(
 								_evancz$elm_graphics$Collage$filled,
 								_elm_lang$core$Color$darkGrey,
-								A2(_evancz$elm_graphics$Collage$rect, r * unit, (r * 1.5) * unit))),
+								A2(_evancz$elm_graphics$Collage$rect, r_u, r_u * 1.5))),
 						_1: {
 							ctor: '::',
 							_0: A2(
 								_evancz$elm_graphics$Collage$moveY,
-								r * unit,
+								r_u,
 								A2(
 									_evancz$elm_graphics$Collage$outlined,
 									my_linestyle,
-									A2(_evancz$elm_graphics$Collage$rect, r * unit, (r * 1.5) * unit))),
+									A2(_evancz$elm_graphics$Collage$rect, r_u, r_u * 1.5))),
 							_1: {
 								ctor: '::',
 								_0: A2(
 									_evancz$elm_graphics$Collage$alpha,
-									minion.cd / minion.cd_max,
+									cd / cd_max,
 									A2(
 										_evancz$elm_graphics$Collage$moveY,
-										r * unit,
+										r_u,
 										A2(
 											_evancz$elm_graphics$Collage$filled,
 											_elm_lang$core$Color$red,
-											A2(_evancz$elm_graphics$Collage$rect, r * unit, (r * 1.5) * unit)))),
+											A2(_evancz$elm_graphics$Collage$rect, r_u, r_u * 1.5)))),
 								_1: {
 									ctor: '::',
 									_0: A2(
 										_evancz$elm_graphics$Collage$filled,
 										_elm_lang$core$Color$yellow,
-										_evancz$elm_graphics$Collage$circle(r * unit)),
+										_evancz$elm_graphics$Collage$circle(r_u)),
 									_1: {
 										ctor: '::',
 										_0: A2(
-											_evancz$elm_graphics$Collage$outlined,
-											my_linestyle,
-											_evancz$elm_graphics$Collage$circle(r * unit)),
-										_1: {ctor: '[]'}
+											_evancz$elm_graphics$Collage$alpha,
+											1 - (hp / Math.pow(r, 2)),
+											A2(
+												_evancz$elm_graphics$Collage$filled,
+												_elm_lang$core$Color$black,
+												_evancz$elm_graphics$Collage$circle(r_u))),
+										_1: {
+											ctor: '::',
+											_0: A2(
+												_evancz$elm_graphics$Collage$outlined,
+												my_linestyle,
+												_evancz$elm_graphics$Collage$circle(r_u)),
+											_1: {ctor: '[]'}
+										}
 									}
 								}
 							}
@@ -13452,7 +13469,11 @@ var _user$project$View$draw_player = function (_p1) {
 			{width: 0.3 * _p4});
 	}(
 		_evancz$elm_graphics$Collage$solid(_elm_lang$core$Color$black));
+	var cd_max = _p3.cd_max;
+	var cd = _p3.cd;
+	var hp = _p3.hp;
 	var r = _p3.r;
+	var r_u = r * _p4;
 	var player_view = A2(
 		_evancz$elm_graphics$Collage$rotate,
 		_elm_lang$core$Basics$radians(0 - _p3.angle),
@@ -13461,45 +13482,55 @@ var _user$project$View$draw_player = function (_p1) {
 				ctor: '::',
 				_0: A2(
 					_evancz$elm_graphics$Collage$moveY,
-					r * _p4,
+					r_u,
 					A2(
 						_evancz$elm_graphics$Collage$filled,
 						_elm_lang$core$Color$darkGrey,
-						A2(_evancz$elm_graphics$Collage$rect, r * _p4, (r * 1.5) * _p4))),
+						A2(_evancz$elm_graphics$Collage$rect, r_u, r_u * 1.5))),
 				_1: {
 					ctor: '::',
 					_0: A2(
 						_evancz$elm_graphics$Collage$moveY,
-						r * _p4,
+						r_u,
 						A2(
 							_evancz$elm_graphics$Collage$outlined,
 							my_linestyle,
-							A2(_evancz$elm_graphics$Collage$rect, r * _p4, (r * 1.5) * _p4))),
+							A2(_evancz$elm_graphics$Collage$rect, r_u, r_u * 1.5))),
 					_1: {
 						ctor: '::',
 						_0: A2(
 							_evancz$elm_graphics$Collage$alpha,
-							_p3.cd / _p3.cd_max,
+							cd / cd_max,
 							A2(
 								_evancz$elm_graphics$Collage$moveY,
-								r * _p4,
+								r_u,
 								A2(
 									_evancz$elm_graphics$Collage$filled,
 									_elm_lang$core$Color$red,
-									A2(_evancz$elm_graphics$Collage$rect, r * _p4, (r * 1.5) * _p4)))),
+									A2(_evancz$elm_graphics$Collage$rect, r_u, r_u * 1.5)))),
 						_1: {
 							ctor: '::',
 							_0: A2(
 								_evancz$elm_graphics$Collage$filled,
 								_elm_lang$core$Color$lightBlue,
-								_evancz$elm_graphics$Collage$circle(r * _p4)),
+								_evancz$elm_graphics$Collage$circle(r_u)),
 							_1: {
 								ctor: '::',
 								_0: A2(
-									_evancz$elm_graphics$Collage$outlined,
-									my_linestyle,
-									_evancz$elm_graphics$Collage$circle(r * _p4)),
-								_1: {ctor: '[]'}
+									_evancz$elm_graphics$Collage$alpha,
+									1 - (hp / Math.pow(r, 2)),
+									A2(
+										_evancz$elm_graphics$Collage$filled,
+										_elm_lang$core$Color$black,
+										_evancz$elm_graphics$Collage$circle(r_u))),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_evancz$elm_graphics$Collage$outlined,
+										my_linestyle,
+										_evancz$elm_graphics$Collage$circle(r_u)),
+									_1: {ctor: '[]'}
+								}
 							}
 						}
 					}
@@ -13586,6 +13617,8 @@ var _user$project$View$is_bullet_in_window = F2(
 var _user$project$View$draw_bullet = F4(
 	function (unit, myline, mycolor, bullet) {
 		var r = bullet.r;
+		var r_u = r * unit;
+		var hp = bullet.hp;
 		var _p18 = bullet.pos;
 		var x = _p18._0;
 		var y = _p18._1;
@@ -13598,14 +13631,24 @@ var _user$project$View$draw_bullet = F4(
 					_0: A2(
 						_evancz$elm_graphics$Collage$filled,
 						mycolor,
-						_evancz$elm_graphics$Collage$circle(r * unit)),
+						_evancz$elm_graphics$Collage$circle(r_u)),
 					_1: {
 						ctor: '::',
 						_0: A2(
-							_evancz$elm_graphics$Collage$outlined,
-							myline,
-							_evancz$elm_graphics$Collage$circle(r * unit)),
-						_1: {ctor: '[]'}
+							_evancz$elm_graphics$Collage$alpha,
+							1 - (hp / Math.pow(r, 2)),
+							A2(
+								_evancz$elm_graphics$Collage$filled,
+								_elm_lang$core$Color$black,
+								_evancz$elm_graphics$Collage$circle(r_u))),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_evancz$elm_graphics$Collage$outlined,
+								myline,
+								_evancz$elm_graphics$Collage$circle(r_u)),
+							_1: {ctor: '[]'}
+						}
 					}
 				}));
 	});
@@ -13720,6 +13763,76 @@ var _user$project$Update$not_collided_o_os = F2(
 			_user$project$Update$not_collided_o_o(obj),
 			objs);
 	});
+var _user$project$Update$handle_bullet_collision = F3(
+	function (bullets, objs, bullet) {
+		var r = bullet.r;
+		var pos = bullet.pos;
+		var hp_offset = _elm_lang$core$List$sum(
+			A2(
+				_elm_lang$core$List$map,
+				function (_) {
+					return _.hp;
+				},
+				A2(
+					_elm_lang$core$List$filter,
+					function (n) {
+						return _elm_lang$core$Native_Utils.cmp(
+							A2(_user$project$Update$distance, n.pos, pos),
+							n.r + r) < 0;
+					},
+					bullets))) + _elm_lang$core$List$sum(
+			A2(
+				_elm_lang$core$List$map,
+				function (_) {
+					return _.hp;
+				},
+				A2(
+					_elm_lang$core$List$filter,
+					function (n) {
+						return _elm_lang$core$Native_Utils.cmp(
+							A2(_user$project$Update$distance, n.pos, pos),
+							n.r + r) < 0;
+					},
+					objs)));
+		return _elm_lang$core$Native_Utils.update(
+			bullet,
+			{hp: bullet.hp - hp_offset});
+	});
+var _user$project$Update$handle_object_collision = F3(
+	function (bullets, objs, obj) {
+		var r = obj.r;
+		var pos = obj.pos;
+		var hp_offset = _elm_lang$core$List$sum(
+			A2(
+				_elm_lang$core$List$map,
+				function (_) {
+					return _.hp;
+				},
+				A2(
+					_elm_lang$core$List$filter,
+					function (n) {
+						return _elm_lang$core$Native_Utils.cmp(
+							A2(_user$project$Update$distance, n.pos, pos),
+							n.r + r) < 0;
+					},
+					bullets))) + _elm_lang$core$List$sum(
+			A2(
+				_elm_lang$core$List$map,
+				function (_) {
+					return _.hp;
+				},
+				A2(
+					_elm_lang$core$List$filter,
+					function (n) {
+						return _elm_lang$core$Native_Utils.cmp(
+							A2(_user$project$Update$distance, n.pos, pos),
+							n.r + r) < 0;
+					},
+					objs)));
+		return _elm_lang$core$Native_Utils.update(
+			obj,
+			{hp: obj.hp - hp_offset});
+	});
 var _user$project$Update$is_player_collided = F3(
 	function (player, minions, bullets) {
 		return !(A2(_user$project$Update$not_collided_o_bs, player, bullets) && A2(_user$project$Update$not_collided_o_os, player, minions));
@@ -13749,7 +13862,13 @@ var _user$project$Update$create_bullet = F2(
 			_0: x - (d * _elm_lang$core$Basics$cos(angle)),
 			_1: y + (d * _elm_lang$core$Basics$sin(angle))
 		};
-		return {pos: new_pos, v: new_v, r: obj.bullet_r, lifespan: obj.bullet_lifespan};
+		return {
+			pos: new_pos,
+			v: new_v,
+			r: obj.bullet_r,
+			lifespan: obj.bullet_lifespan,
+			hp: Math.pow(obj.bullet_r, 2)
+		};
 	});
 var _user$project$Update$update_bullet = F3(
 	function (dt, _p6, bullet) {
@@ -14021,10 +14140,12 @@ var _user$project$Update$update = F2(
 				var new_player = function () {
 					var _p35 = _elm_lang$core$String$toFloat(_p34._0);
 					if (_p35.ctor === 'Ok') {
+						var v = A2(_elm_lang$core$Basics$max, 1, _p35._0);
 						return _elm_lang$core$Native_Utils.update(
 							player,
 							{
-								r: A2(_elm_lang$core$Basics$max, 0, _p35._0)
+								r: v,
+								hp: Math.pow(v, 2)
 							});
 					} else {
 						return player;
@@ -14271,10 +14392,12 @@ var _user$project$Update$update = F2(
 				var new_minion = function () {
 					var _p46 = _elm_lang$core$String$toFloat(_p34._0);
 					if (_p46.ctor === 'Ok') {
+						var v = A2(_elm_lang$core$Basics$max, 1, _p46._0);
 						return _elm_lang$core$Native_Utils.update(
 							minion,
 							{
-								r: A2(_elm_lang$core$Basics$max, 0, _p46._0)
+								r: v,
+								hp: Math.pow(v, 2)
 							});
 					} else {
 						return minion;
@@ -14673,67 +14796,95 @@ var _user$project$Update$update = F2(
 				};
 			case 'GameUpdate':
 				var _p64 = _user$project$Update$update_player(model);
-				var new_player = _p64._0;
+				var temp_player = _p64._0;
 				var offset = _p64._1;
-				var new_grid = A2(_user$project$Update$update_grid, model, offset);
 				var temp_player_bullets = A2(_user$project$Update$update_player_bullets, offset, model);
 				var temp_minion_bullets = A2(_user$project$Update$update_minion_bullets, offset, model);
 				var temp_minions = A2(_user$project$Update$update_minions, offset, model);
-				var new_player_bullets = model.player.bullet_penetrate ? temp_player_bullets : A2(
+				var new_grid = A2(_user$project$Update$update_grid, model, offset);
+				var minion = model.minion;
+				var player = model.player;
+				var new_player_bullets = player.bullet_penetrate ? temp_player_bullets : A2(
 					_elm_lang$core$List$filter,
-					function (x) {
-						return A2(_user$project$Update$not_collided_b_bs, x, temp_minion_bullets) && A2(_user$project$Update$not_collided_b_os, x, temp_minions);
+					function (_p65) {
+						var _p66 = _p65;
+						return (_elm_lang$core$Native_Utils.cmp(_p66.lifespan, 0) > 0) && (_elm_lang$core$Native_Utils.cmp(_p66.hp, 0) > 0);
 					},
-					temp_player_bullets);
-				var new_minion_bullets = model.minion.bullet_penetrate ? temp_minion_bullets : A2(
+					A2(
+						_elm_lang$core$List$map,
+						A2(_user$project$Update$handle_bullet_collision, temp_minion_bullets, temp_minions),
+						temp_player_bullets));
+				var new_minion_bullets = minion.bullet_penetrate ? temp_minion_bullets : A2(
 					_elm_lang$core$List$filter,
-					function (x) {
-						return A2(_user$project$Update$not_collided_b_bs, x, temp_player_bullets) && A2(
-							_user$project$Update$not_collided_b_os,
-							x,
+					function (_p67) {
+						var _p68 = _p67;
+						return (_elm_lang$core$Native_Utils.cmp(_p68.lifespan, 0) > 0) && (_elm_lang$core$Native_Utils.cmp(_p68.hp, 0) > 0);
+					},
+					A2(
+						_elm_lang$core$List$map,
+						A2(
+							_user$project$Update$handle_bullet_collision,
+							temp_player_bullets,
 							{
 								ctor: '::',
 								_0: _elm_lang$core$Native_Utils.update(
-									new_player,
+									player,
 									{
 										pos: {ctor: '_Tuple2', _0: 0, _1: 0}
 									}),
 								_1: {ctor: '[]'}
-							});
-					},
-					temp_minion_bullets);
-				var new_minions = model.minion.invincible ? temp_minions : A2(
+							}),
+						temp_minion_bullets));
+				var new_minions = minion.invincible ? temp_minions : A2(
 					_elm_lang$core$List$filter,
-					function (x) {
-						return A2(_user$project$Update$not_collided_o_bs, x, temp_player_bullets) && A2(
-							_user$project$Update$not_collided_o_os,
-							x,
+					function (_p69) {
+						var _p70 = _p69;
+						return _elm_lang$core$Native_Utils.cmp(_p70.hp, 0) > 0;
+					},
+					A2(
+						_elm_lang$core$List$map,
+						A2(
+							_user$project$Update$handle_object_collision,
+							temp_player_bullets,
 							{
 								ctor: '::',
 								_0: _elm_lang$core$Native_Utils.update(
-									new_player,
+									player,
 									{
 										pos: {ctor: '_Tuple2', _0: 0, _1: 0}
 									}),
 								_1: {ctor: '[]'}
-							});
-					},
-					temp_minions);
-				var new_paused = new_player.invincible ? model.paused : A3(
-					_user$project$Update$is_player_collided,
-					_elm_lang$core$Native_Utils.update(
-						new_player,
-						{
-							pos: {ctor: '_Tuple2', _0: 0, _1: 0}
-						}),
-					temp_minions,
-					temp_minion_bullets);
+							}),
+						temp_minions));
+				var new_player = player.invincible ? temp_player : function (n) {
+					return _elm_lang$core$Native_Utils.update(
+						n,
+						{pos: player.pos});
+				}(
+					A3(
+						_user$project$Update$handle_object_collision,
+						temp_minion_bullets,
+						temp_minions,
+						_elm_lang$core$Native_Utils.update(
+							temp_player,
+							{
+								pos: {ctor: '_Tuple2', _0: 0, _1: 0}
+							})));
+				var new_paused = function (_p71) {
+					var _p72 = _p71;
+					return _elm_lang$core$Native_Utils.cmp(_p72.hp, 0) < 1;
+				}(new_player);
 				var new_dt = _p34._0 / 1000;
 				return new_paused ? {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
 						model,
 						{
+							player: _elm_lang$core$Native_Utils.update(
+								new_player,
+								{
+									hp: Math.pow(new_player.r, 2)
+								}),
 							minions: {ctor: '[]'},
 							player_bullets: {ctor: '[]'},
 							minion_bullets: {ctor: '[]'},
