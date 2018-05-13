@@ -14694,6 +14694,11 @@ var _user$project$Update$update = F2(
 					_0: new_paused ? _elm_lang$core$Native_Utils.update(
 						model,
 						{
+							player: _elm_lang$core$Native_Utils.update(
+								player,
+								{
+									hp: Math.pow(player.r, 2)
+								}),
 							minions: {ctor: '[]'},
 							player_bullets: {ctor: '[]'},
 							minion_bullets: {ctor: '[]'},

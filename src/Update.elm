@@ -256,7 +256,8 @@ update msg model =
       in
         ( if new_paused then 
             { model 
-                | minions = []
+                | player = {player | hp = player.r^2}
+                , minions = []
                 , player_bullets = []
                 , minion_bullets = []
                 , paused = new_paused
