@@ -46,6 +46,7 @@ type alias GameObj =
   , angle : Float
   , cd : Float
   , r : Float 
+  , hp : Float
   , v_max : Float
   , a_max : Float
   , cd_max : Float
@@ -64,6 +65,7 @@ init_gameobj =
   , v = (0,0)
   , a = (0,0)
   , r = 3
+  , hp = 9
   , angle = 0
   , cd = 0
   , v_max = 30
@@ -84,6 +86,7 @@ type alias Bullet =
   , v : Vector
   , r : Float
   , lifespan : Float
+  , hp : Float
   }
 
 type alias Vector = 

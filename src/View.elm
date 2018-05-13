@@ -35,11 +35,16 @@ draw_bullet : Float -> LineStyle -> Color.Color -> Bullet -> Form
 draw_bullet unit myline mycolor bullet =
   let
     (x,y) = bullet.pos
+    hp = bullet.hp
     r = bullet.r
+    r_u = r*unit
   in
-    [ circle (r*unit)
+    [ circle r_u
         |> filled mycolor
-    , circle (r*unit)
+    , circle r_u
+        |> filled Color.black
+        |> alpha (1 - hp/r^2)
+    , circle r_u
         |> outlined myline
     ] |> group 
       |> move (x*unit,y*unit) 
@@ -99,25 +104,32 @@ draw_player : Model -> List Form
 draw_player {unit, player} = 
   let
     r = player.r
+    r_u = r*unit
+    hp = player.hp
+    cd = player.cd
+    cd_max = player.cd_max
 
     my_linestyle = 
       (solid Color.black)
         |> (\n -> {n | width=0.3*unit}) 
 
     player_view = 
-      [ rect (r*unit) (r*1.5*unit)
+      [ rect r_u (r_u*1.5)
           |> filled Color.darkGrey
-          |> moveY (r*unit)
-      , rect (r*unit) (r*1.5*unit)
+          |> moveY r_u
+      , rect r_u (r_u*1.5)
           |> outlined my_linestyle
-          |> moveY (r*unit)
-      , rect (r*unit) (r*1.5*unit)
+          |> moveY r_u
+      , rect r_u (r_u*1.5)
           |> filled Color.red
-          |> moveY (r*unit)
-          |> alpha (player.cd/player.cd_max)
-      , circle (r*unit)
+          |> moveY r_u
+          |> alpha (cd/cd_max)
+      , circle r_u
           |> filled Color.lightBlue
-      , circle (r*unit)
+      , circle r_u 
+          |> filled Color.black
+          |> alpha (1 - hp/r^2)
+      , circle r_u
           |> outlined my_linestyle
       ] |> group
         |> rotate (radians -player.angle)
@@ -128,25 +140,32 @@ draw_minion : Float -> GameObj -> Form
 draw_minion unit minion = 
   let
     r = minion.r
+    r_u = r*unit
     (x,y) = minion.pos
+    cd = minion.cd
+    cd_max = minion.cd_max
+    hp = minion.hp
   
     my_linestyle = 
       (solid Color.black)
         |> (\n -> {n | width=0.3*unit}) 
   in
-    [ rect (r*unit) (r*1.5*unit)
+    [ rect r_u (r_u*1.5)
         |> filled Color.darkGrey
-        |> moveY (r*unit)
-    , rect (r*unit) (r*1.5*unit)
+        |> moveY r_u
+    , rect r_u (r_u*1.5)
         |> outlined my_linestyle
-        |> moveY (r*unit)
-      , rect (r*unit) (r*1.5*unit)
-          |> filled Color.red
-          |> moveY (r*unit)
-          |> alpha (minion.cd/minion.cd_max)
-    , circle (r*unit)
+        |> moveY r_u
+    , rect r_u (r_u*1.5)
+        |> filled Color.red
+        |> moveY r_u
+        |> alpha (cd/cd_max)
+    , circle r_u
         |> filled Color.yellow
-    , circle (r*unit)
+    , circle r_u 
+        |> filled Color.black
+        |> alpha (1 - hp/r^2)
+    , circle r_u
         |> outlined my_linestyle
     ] |> group
       |> rotate (radians -minion.angle)

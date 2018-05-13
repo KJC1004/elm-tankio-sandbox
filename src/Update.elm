@@ -17,7 +17,9 @@ update msg model =
         player = model.player
         new_player =
           case String.toFloat str of
-            Ok val -> {player | r = max 0 val}
+            Ok val -> 
+              let v=max 1 val in
+                {player | r = v, hp = v^2}
             Err error -> player
       in
         ({model | player=new_player}, Cmd.none)
@@ -124,7 +126,9 @@ update msg model =
         minion = model.minion
         new_minion =
           case String.toFloat str of
-            Ok val -> {minion | r = max 0 val}
+            Ok val -> 
+              let v = max 1 val in
+                {minion | r = v, hp = v^2}
             Err error -> minion
       in
         ({model | minion=new_minion}, Cmd.none)
@@ -298,64 +302,58 @@ update msg model =
       let
         new_dt = dt/1000
 
-        (new_player,offset) = 
-          update_player model
+        player = model.player
+        minion = model.minion
+
+        (temp_player,offset) = update_player model
+        temp_player_bullets = update_player_bullets offset model
+        temp_minion_bullets = update_minion_bullets offset model
+        temp_minions = update_minions offset model 
+
+        new_player_bullets = 
+          if player.bullet_penetrate then
+            temp_player_bullets
+          else
+            temp_player_bullets
+              |> List.map (handle_bullet_collision temp_minion_bullets temp_minions)
+              |> List.filter(\{lifespan,hp} -> lifespan>0 && hp>0)
+
+        new_minion_bullets =   
+          if minion.bullet_penetrate then
+            temp_minion_bullets
+          else 
+            temp_minion_bullets 
+              |> List.map (handle_bullet_collision temp_player_bullets [{player | pos=(0,0)}])
+              |> List.filter (\{lifespan,hp} -> lifespan>0 && hp > 0)
+
+        new_minions = 
+          if minion.invincible then 
+            temp_minions
+          else 
+            temp_minions
+              |> List.map (handle_object_collision temp_player_bullets [{player | pos=(0,0)}])
+              |> List.filter (\{hp} -> hp>0)
+
+        new_player = 
+          if player.invincible then
+            temp_player
+          else 
+            {temp_player | pos=(0,0)}
+              |>  handle_object_collision temp_minion_bullets temp_minions
+              |> (\n -> {n | pos = player.pos})
+
+
+        new_paused = 
+          new_player |> (\{hp} -> hp <= 0)
 
         new_grid = 
           update_grid model offset
-    
-        temp_player_bullets = 
-          update_player_bullets offset model
-        
-        temp_minion_bullets = 
-          update_minion_bullets offset model
-        
-        temp_minions = 
-          update_minions offset model 
-
-        new_player_bullets = 
-          if model.player.bullet_penetrate then
-            temp_player_bullets
-          else
-            temp_player_bullets
-              |> List.filter (\x 
-                  -> not_collided_b_bs x temp_minion_bullets 
-                  && not_collided_b_os x temp_minions
-                  )
-
-        new_minion_bullets =
-          if model.minion.bullet_penetrate then
-            temp_minion_bullets
-          else 
-            temp_minion_bullets
-              |> List.filter (\x 
-                  -> not_collided_b_bs x temp_player_bullets
-                  && not_collided_b_os x [{new_player | pos=(0,0)}]
-                  )
-
-        new_minions = 
-          if model.minion.invincible then 
-            temp_minions
-          else 
-            temp_minions
-              |> List.filter (\x 
-                  -> not_collided_o_bs x temp_player_bullets
-                  && not_collided_o_os x [{new_player | pos=(0,0)}]
-                  )
-
-        new_paused = 
-          if new_player.invincible then
-            model.paused
-          else
-            is_player_collided 
-              {new_player | pos=(0,0)}
-              temp_minions
-              temp_minion_bullets
 
       in
         if new_paused then 
           ( { model 
-                | minions = []
+                | player = {new_player | hp=new_player.r^2}
+                , minions = []
                 , player_bullets = []
                 , minion_bullets = []
                 , paused = new_paused
@@ -532,6 +530,7 @@ create_bullet model obj =
     , v=new_v
     , r=obj.bullet_r
     , lifespan=obj.bullet_lifespan
+    , hp= obj.bullet_r^2
     }
 
 update_player_bullets : Vector -> Model -> List Bullet
@@ -626,3 +625,42 @@ not_collided_o_os obj objs =
 not_collided_o_o : GameObj -> GameObj -> Bool
 not_collided_o_o a b =
   distance a.pos b.pos > a.r + b.r
+
+
+handle_bullet_collision : List Bullet -> List GameObj -> Bullet -> Bullet 
+handle_bullet_collision bullets objs bullet =
+  let 
+    pos = bullet.pos
+    r = bullet.r
+    hp_offset =
+      ( bullets 
+          |> List.filter (\n -> distance n.pos pos < n.r + r)
+          |> List.map .hp
+          |> List.sum
+      ) +
+      ( objs 
+          |> List.filter (\n -> distance n.pos pos < n.r + r)
+          |> List.map .hp
+          |> List.sum
+      )
+  in 
+    { bullet | hp = bullet.hp - hp_offset}
+
+handle_object_collision : List Bullet -> List GameObj -> GameObj -> GameObj
+handle_object_collision bullets objs obj =
+  let
+    pos = obj.pos
+    r = obj.r
+    hp_offset =
+      ( bullets 
+          |> List.filter (\n -> distance n.pos pos < n.r + r)
+          |> List.map .hp
+          |> List.sum
+      ) +
+      ( objs 
+          |> List.filter (\n -> distance n.pos pos < n.r + r)
+          |> List.map .hp
+          |> List.sum
+      )
+  in 
+    { obj | hp = obj.hp - hp_offset}
