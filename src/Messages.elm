@@ -25,8 +25,8 @@ type Msg
   | PlayerBulletLifespan String
   | PlayerBulletSpreadRatio String
   | PlayerBulletInertiaRatio String
-  | PlayerBulletPenetrate String
-  | PlayerInvincible String
+  | PlayerBulletInvincibility String
+  | PlayerInvincibility String
   
   | MinionMax String
   | MinionR String
@@ -38,6 +38,6 @@ type Msg
   | MinionBulletLifespan String
   | MinionBulletSpreadRatio String
   | MinionBulletInertiaRatio String
-  | MinionBulletPenetrate String
-  | MinionInvincible String
+  | MinionBulletInvincibility String
+  | MinionInvincibility String
 

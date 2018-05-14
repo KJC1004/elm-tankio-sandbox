@@ -104,16 +104,22 @@ update msg model =
             Err error -> player
       in
         ({model | player=new_player}, Cmd.none)
-    PlayerBulletPenetrate str ->
+    PlayerBulletInvincibility str ->
       let 
         player = model.player
-        new_player = {player | bullet_penetrate =  not player.bullet_penetrate}
+        new_player =
+          case String.toFloat str of
+            Ok val -> {player | bullet_invincibility = max 0 <| min 1 val}
+            Err error -> player
       in
         ({model | player=new_player}, Cmd.none)
-    PlayerInvincible str ->
+    PlayerInvincibility str ->
       let 
         player = model.player
-        new_player = {player | invincible = not player.invincible}
+        new_player =
+          case String.toFloat str of
+            Ok val -> {player | invincibility = max 0 <| min 1 val}
+            Err error -> player 
       in
         ({model | player=new_player}, Cmd.none)
     
@@ -204,16 +210,22 @@ update msg model =
             Err error -> minion
       in
         ({model | minion=new_minion}, Cmd.none)
-    MinionBulletPenetrate str ->
+    MinionBulletInvincibility str ->
       let 
         minion = model.minion
-        new_minion = {minion | bullet_penetrate =  not minion.bullet_penetrate}
+        new_minion =
+          case String.toFloat str of
+            Ok val -> {minion | bullet_invincibility = max 0 <| min 1 val}
+            Err error -> minion
       in
         ({model | minion=new_minion}, Cmd.none)
-    MinionInvincible str ->
+    MinionInvincibility str ->
       let 
         minion = model.minion
-        new_minion = {minion | invincible = not minion.invincible}
+        new_minion =
+          case String.toFloat str of
+            Ok val -> {minion | invincibility = max 0 <| min 1 val}
+            Err error -> minion
       in
         ({model | minion=new_minion}, Cmd.none)
     
@@ -288,10 +300,12 @@ update msg model =
     WindowResize size ->
       let 
         (w, h) = (toFloat size.width, toFloat size.height)
+
         switch = if h < w then True else False 
         ratio = if switch then (w / h) else (h / w)
         seg_h = h / if     switch then 10 else ((10 * ratio) |> floor |> toFloat)
         seg_w = w / if not switch then 10 else ((10 * ratio) |> floor |> toFloat)
+
         row = List.map (\n -> toFloat n * seg_h) (List.range 0 (floor (h/seg_h) - 1))
         col = List.map (\n -> toFloat n * seg_w) (List.range 0 (floor (w/seg_w) - 1))
 
@@ -312,37 +326,24 @@ update msg model =
         temp_minions = update_minions offset model 
 
         new_player_bullets = 
-          if player.bullet_penetrate then
-            temp_player_bullets
-          else
             temp_player_bullets
               |> List.map (handle_bullet_collision temp_minion_bullets temp_minions)
               |> List.filter(\{lifespan,hp} -> lifespan>0 && hp>0)
 
-        new_minion_bullets =   
-          if minion.bullet_penetrate then
-            temp_minion_bullets
-          else 
+        new_minion_bullets = 
             temp_minion_bullets 
               |> List.map (handle_bullet_collision temp_player_bullets [{player | pos=(0,0)}])
               |> List.filter (\{lifespan,hp} -> lifespan>0 && hp > 0)
 
         new_minions = 
-          if minion.invincible then 
-            temp_minions
-          else 
             temp_minions
               |> List.map (handle_object_collision temp_player_bullets [{player | pos=(0,0)}])
               |> List.filter (\{hp} -> hp>0)
 
         new_player = 
-          if player.invincible then
-            temp_player
-          else 
             {temp_player | pos=(0,0)}
               |>  handle_object_collision temp_minion_bullets temp_minions
               |> (\n -> {n | pos = player.pos})
-
 
         new_paused = 
           new_player |> (\{hp} -> hp <= 0)
@@ -532,6 +533,7 @@ create_bullet model obj =
     , r=obj.bullet_r
     , lifespan=obj.bullet_lifespan
     , hp= obj.bullet_r^2
+    , invincibility = obj.bullet_invincibility
     }
 
 update_player_bullets : Vector -> Model -> List Bullet
@@ -588,50 +590,15 @@ update_minion_bullets offset model =
       |> List.map (update_bullet dt offset)
       |> List.filter (\{lifespan} -> lifespan>0)
 
-is_player_collided : GameObj -> List GameObj -> List Bullet -> Bool
-is_player_collided player minions bullets =
-  not 
-    ( not_collided_o_bs player bullets &&
-      not_collided_o_os player minions
-    )
-
 distance : Vector -> Vector -> Float
 distance (x0,y0) (x1,y1) =
   sqrt ((x0-x1)^2 + (y0-y1)^2)
-
-not_collided_b_bs : Bullet -> List Bullet -> Bool
-not_collided_b_bs bullet bullets =
-  List.all (not_collided_b_b bullet) bullets
-not_collided_b_b : Bullet -> Bullet -> Bool
-not_collided_b_b a b =
-  distance a.pos b.pos > a.r + b.r
-
-not_collided_o_bs : GameObj -> List Bullet -> Bool
-not_collided_o_bs obj bullets =
-  List.all (not_collided_o_b obj) bullets
-not_collided_o_b : GameObj -> Bullet -> Bool
-not_collided_o_b a b =
-  distance a.pos b.pos > a.r + b.r
-
-not_collided_b_os : Bullet -> List GameObj -> Bool
-not_collided_b_os bullet objs = 
-  List.all (not_collided_b_o bullet) objs
-not_collided_b_o : Bullet -> GameObj -> Bool
-not_collided_b_o a b =
-  distance a.pos b.pos > a.r + b.r
-
-not_collided_o_os : GameObj -> List GameObj -> Bool
-not_collided_o_os obj objs =
-  List.all (not_collided_o_o obj) objs
-not_collided_o_o : GameObj -> GameObj -> Bool
-not_collided_o_o a b =
-  distance a.pos b.pos > a.r + b.r
-
 
 handle_bullet_collision : List Bullet -> List GameObj -> Bullet -> Bullet 
 handle_bullet_collision bullets objs bullet =
   let 
     pos = bullet.pos
+    invincibility = bullet.invincibility
     r = bullet.r
     hp_offset =
       ( bullets 
@@ -645,12 +612,13 @@ handle_bullet_collision bullets objs bullet =
           |> List.sum
       )
   in 
-    { bullet | hp = bullet.hp - hp_offset}
+    { bullet | hp = bullet.hp - hp_offset*(1-invincibility)}
 
 handle_object_collision : List Bullet -> List GameObj -> GameObj -> GameObj
 handle_object_collision bullets objs obj =
   let
     pos = obj.pos
+    invincibility = obj.invincibility
     r = obj.r
     hp_offset =
       ( bullets 
@@ -664,4 +632,4 @@ handle_object_collision bullets objs obj =
           |> List.sum
       )
   in 
-    { obj | hp = obj.hp - hp_offset}
+    { obj | hp = obj.hp - hp_offset*(1-invincibility)}

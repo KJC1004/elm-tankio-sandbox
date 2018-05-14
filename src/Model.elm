@@ -25,7 +25,7 @@ init : (Model, Cmd Msg)
 init =
   ( { player = { init_gameobj | bullet_inertia_ratio=1, v_max=50, cd_max=0.1} 
     , minion = init_gameobj
-    , minion_max = 5
+    , minion_max = 3
     , minions = []
     , player_bullets = []
     , minion_bullets = []
@@ -56,8 +56,8 @@ type alias GameObj =
   , bullet_lifespan : Float
   , bullet_spread_ratio : Float
   , bullet_inertia_ratio : Float
-  , bullet_penetrate : Bool
-  , invincible : Bool
+  , bullet_invincibility : Float
+  , invincibility : Float
   }
 init_gameobj : GameObj
 init_gameobj = 
@@ -77,8 +77,8 @@ init_gameobj =
   , bullet_lifespan = 5
   , bullet_spread_ratio = 0
   , bullet_inertia_ratio = 0
-  , bullet_penetrate = False
-  , invincible = False
+  , bullet_invincibility = 0
+  , invincibility = 0
   }
 
 type alias Bullet = 
@@ -87,6 +87,7 @@ type alias Bullet =
   , r : Float
   , lifespan : Float
   , hp : Float
+  , invincibility : Float
   }
 
 type alias Vector = 

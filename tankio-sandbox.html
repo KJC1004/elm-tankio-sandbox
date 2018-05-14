@@ -12579,11 +12579,11 @@ var _evancz$elm_graphics$Collage$ngon = F2(
 				f,
 				A2(_elm_lang$core$List$range, 0, n - 1)));
 	});
-var _user$project$Messages$MinionInvincible = function (a) {
-	return {ctor: 'MinionInvincible', _0: a};
+var _user$project$Messages$MinionInvincibility = function (a) {
+	return {ctor: 'MinionInvincibility', _0: a};
 };
-var _user$project$Messages$MinionBulletPenetrate = function (a) {
-	return {ctor: 'MinionBulletPenetrate', _0: a};
+var _user$project$Messages$MinionBulletInvincibility = function (a) {
+	return {ctor: 'MinionBulletInvincibility', _0: a};
 };
 var _user$project$Messages$MinionBulletInertiaRatio = function (a) {
 	return {ctor: 'MinionBulletInertiaRatio', _0: a};
@@ -12615,11 +12615,11 @@ var _user$project$Messages$MinionR = function (a) {
 var _user$project$Messages$MinionMax = function (a) {
 	return {ctor: 'MinionMax', _0: a};
 };
-var _user$project$Messages$PlayerInvincible = function (a) {
-	return {ctor: 'PlayerInvincible', _0: a};
+var _user$project$Messages$PlayerInvincibility = function (a) {
+	return {ctor: 'PlayerInvincibility', _0: a};
 };
-var _user$project$Messages$PlayerBulletPenetrate = function (a) {
-	return {ctor: 'PlayerBulletPenetrate', _0: a};
+var _user$project$Messages$PlayerBulletInvincibility = function (a) {
+	return {ctor: 'PlayerBulletInvincibility', _0: a};
 };
 var _user$project$Messages$PlayerBulletInertiaRatio = function (a) {
 	return {ctor: 'PlayerBulletInertiaRatio', _0: a};
@@ -12692,8 +12692,8 @@ var _user$project$Model$init_gameobj = {
 	bullet_lifespan: 5,
 	bullet_spread_ratio: 0,
 	bullet_inertia_ratio: 0,
-	bullet_penetrate: false,
-	invincible: false
+	bullet_invincibility: 0,
+	invincibility: 0
 };
 var _user$project$Model$init = {
 	ctor: '_Tuple2',
@@ -12702,7 +12702,7 @@ var _user$project$Model$init = {
 			_user$project$Model$init_gameobj,
 			{bullet_inertia_ratio: 1, v_max: 50, cd_max: 0.1}),
 		minion: _user$project$Model$init_gameobj,
-		minion_max: 5,
+		minion_max: 3,
 		minions: {ctor: '[]'},
 		player_bullets: {ctor: '[]'},
 		minion_bullets: {ctor: '[]'},
@@ -12765,7 +12765,7 @@ var _user$project$Model$GameObj = function (a) {
 															return function (p) {
 																return function (q) {
 																	return function (r) {
-																		return {pos: a, v: b, a: c, angle: d, cd: e, r: f, hp: g, v_max: h, a_max: i, cd_max: j, bullet_r: k, bullet_v: l, bullet_max: m, bullet_lifespan: n, bullet_spread_ratio: o, bullet_inertia_ratio: p, bullet_penetrate: q, invincible: r};
+																		return {pos: a, v: b, a: c, angle: d, cd: e, r: f, hp: g, v_max: h, a_max: i, cd_max: j, bullet_r: k, bullet_v: l, bullet_max: m, bullet_lifespan: n, bullet_spread_ratio: o, bullet_inertia_ratio: p, bullet_invincibility: q, invincibility: r};
 																	};
 																};
 															};
@@ -12784,9 +12784,9 @@ var _user$project$Model$GameObj = function (a) {
 		};
 	};
 };
-var _user$project$Model$Bullet = F5(
-	function (a, b, c, d, e) {
-		return {pos: a, v: b, r: c, lifespan: d, hp: e};
+var _user$project$Model$Bullet = F6(
+	function (a, b, c, d, e, f) {
+		return {pos: a, v: b, r: c, lifespan: d, hp: e, invincibility: f};
 	});
 var _user$project$View$tableStyles = {
 	ctor: '::',
@@ -12814,94 +12814,6 @@ var _user$project$View$tableStyles = {
 		_1: {ctor: '[]'}
 	}
 };
-var _user$project$View$tr_checkbox = F5(
-	function (model, str, func, msg0, msg1) {
-		var minion = model.minion;
-		var player = model.player;
-		return A2(
-			_elm_lang$html$Html$tr,
-			{ctor: '[]'},
-			{
-				ctor: '::',
-				_0: A2(
-					_elm_lang$html$Html$td,
-					{ctor: '[]'},
-					{ctor: '[]'}),
-				_1: {
-					ctor: '::',
-					_0: A2(
-						_elm_lang$html$Html$td,
-						{ctor: '[]'},
-						{
-							ctor: '::',
-							_0: A2(
-								_elm_lang$html$Html$input,
-								{
-									ctor: '::',
-									_0: _elm_lang$html$Html_Attributes$type_('checkbox'),
-									_1: {
-										ctor: '::',
-										_0: _elm_lang$html$Html_Attributes$checked(
-											func(player)),
-										_1: {
-											ctor: '::',
-											_0: _elm_lang$html$Html_Events$onInput(msg0),
-											_1: {ctor: '[]'}
-										}
-									}
-								},
-								{ctor: '[]'}),
-							_1: {ctor: '[]'}
-						}),
-					_1: {
-						ctor: '::',
-						_0: A2(
-							_elm_lang$html$Html$td,
-							{ctor: '[]'},
-							{
-								ctor: '::',
-								_0: _elm_lang$html$Html$text(str),
-								_1: {ctor: '[]'}
-							}),
-						_1: {
-							ctor: '::',
-							_0: A2(
-								_elm_lang$html$Html$td,
-								{ctor: '[]'},
-								{
-									ctor: '::',
-									_0: A2(
-										_elm_lang$html$Html$input,
-										{
-											ctor: '::',
-											_0: _elm_lang$html$Html_Attributes$type_('checkbox'),
-											_1: {
-												ctor: '::',
-												_0: _elm_lang$html$Html_Attributes$checked(
-													func(minion)),
-												_1: {
-													ctor: '::',
-													_0: _elm_lang$html$Html_Events$onInput(msg1),
-													_1: {ctor: '[]'}
-												}
-											}
-										},
-										{ctor: '[]'}),
-									_1: {ctor: '[]'}
-								}),
-							_1: {
-								ctor: '::',
-								_0: A2(
-									_elm_lang$html$Html$td,
-									{ctor: '[]'},
-									{ctor: '[]'}),
-								_1: {ctor: '[]'}
-							}
-						}
-					}
-				}
-			});
-	});
 var _user$project$View$tr_input = F5(
 	function (model, str, func, msg0, msg1) {
 		var minion = model.minion;
@@ -13252,25 +13164,25 @@ var _user$project$View$pause_view = function (model) {
 															_1: {
 																ctor: '::',
 																_0: A5(
-																	_user$project$View$tr_checkbox,
+																	_user$project$View$tr_input,
 																	model,
-																	'Bullet Penetrate',
+																	'Bullet Invincibility (0~1)',
 																	function (_) {
-																		return _.bullet_penetrate;
+																		return _.bullet_invincibility;
 																	},
-																	_user$project$Messages$PlayerBulletPenetrate,
-																	_user$project$Messages$MinionBulletPenetrate),
+																	_user$project$Messages$PlayerBulletInvincibility,
+																	_user$project$Messages$MinionBulletInvincibility),
 																_1: {
 																	ctor: '::',
 																	_0: A5(
-																		_user$project$View$tr_checkbox,
+																		_user$project$View$tr_input,
 																		model,
-																		'Invincible',
+																		'Invincibility (0~1)',
 																		function (_) {
-																			return _.invincible;
+																			return _.invincibility;
 																		},
-																		_user$project$Messages$PlayerInvincible,
-																		_user$project$Messages$MinionInvincible),
+																		_user$project$Messages$PlayerInvincibility,
+																		_user$project$Messages$MinionInvincibility),
 																	_1: {
 																		ctor: '::',
 																		_0: A2(
@@ -13550,6 +13462,11 @@ var _user$project$View$draw_grid = function (_p5) {
 	var _p8 = _p6.window;
 	var w = _p8._0;
 	var h = _p8._1;
+	var _p9 = {ctor: '_Tuple4', _0: w / 2, _1: h / 2, _2: (0 - w) / 2, _3: (0 - h) / 2};
+	var hw = _p9._0;
+	var hh = _p9._1;
+	var nhw = _p9._2;
+	var nhh = _p9._3;
 	var row_view = A2(
 		_elm_lang$core$List$map,
 		_evancz$elm_graphics$Collage$traced(
@@ -13559,13 +13476,13 @@ var _user$project$View$draw_grid = function (_p5) {
 			function (n) {
 				return A2(
 					_evancz$elm_graphics$Collage$segment,
-					{ctor: '_Tuple2', _0: (0 - w) / 2, _1: n},
-					{ctor: '_Tuple2', _0: w / 2, _1: n});
+					{ctor: '_Tuple2', _0: nhw, _1: n},
+					{ctor: '_Tuple2', _0: hw, _1: n});
 			},
 			A2(
 				_elm_lang$core$List$map,
 				function (n) {
-					return n - (h / 2);
+					return n - hh;
 				},
 				row)));
 	var col_view = A2(
@@ -13577,22 +13494,22 @@ var _user$project$View$draw_grid = function (_p5) {
 			function (n) {
 				return A2(
 					_evancz$elm_graphics$Collage$segment,
-					{ctor: '_Tuple2', _0: n, _1: (0 - h) / 2},
-					{ctor: '_Tuple2', _0: n, _1: h / 2});
+					{ctor: '_Tuple2', _0: n, _1: nhh},
+					{ctor: '_Tuple2', _0: n, _1: hh});
 			},
 			A2(
 				_elm_lang$core$List$map,
 				function (n) {
-					return n - (w / 2);
+					return n - hw;
 				},
 				col)));
 	return A2(_elm_lang$core$Basics_ops['++'], row_view, col_view);
 };
-var _user$project$View$draw_background = function (_p9) {
-	var _p10 = _p9;
-	var _p11 = _p10.window;
-	var w = _p11._0;
-	var h = _p11._1;
+var _user$project$View$draw_background = function (_p10) {
+	var _p11 = _p10;
+	var _p12 = _p11.window;
+	var w = _p12._0;
+	var h = _p12._1;
 	return {
 		ctor: '::',
 		_0: A2(
@@ -13603,15 +13520,15 @@ var _user$project$View$draw_background = function (_p9) {
 	};
 };
 var _user$project$View$is_bullet_in_window = F2(
-	function (_p13, _p12) {
-		var _p14 = _p13;
-		var _p15 = _p12;
-		var _p17 = _p15.r;
-		var bound_y = _p17 + (_p14._1 / 2);
-		var bound_x = _p17 + (_p14._0 / 2);
-		var _p16 = _p15.pos;
-		var x = _p16._0;
-		var y = _p16._1;
+	function (_p14, _p13) {
+		var _p15 = _p14;
+		var _p16 = _p13;
+		var _p18 = _p16.r;
+		var bound_y = _p18 + (_p15._1 / 2);
+		var bound_x = _p18 + (_p15._0 / 2);
+		var _p17 = _p16.pos;
+		var x = _p17._0;
+		var y = _p17._1;
 		return (_elm_lang$core$Native_Utils.cmp(x, bound_x) < 0) && ((_elm_lang$core$Native_Utils.cmp(x, 0 - bound_x) > 0) && ((_elm_lang$core$Native_Utils.cmp(y, bound_y) < 0) && (_elm_lang$core$Native_Utils.cmp(y, 0 - bound_y) > 0)));
 	});
 var _user$project$View$draw_bullet = F4(
@@ -13619,9 +13536,9 @@ var _user$project$View$draw_bullet = F4(
 		var r = bullet.r;
 		var r_u = r * unit;
 		var hp = bullet.hp;
-		var _p18 = bullet.pos;
-		var x = _p18._0;
-		var y = _p18._1;
+		var _p19 = bullet.pos;
+		var x = _p19._0;
+		var y = _p19._1;
 		return A2(
 			_evancz$elm_graphics$Collage$move,
 			{ctor: '_Tuple2', _0: x * unit, _1: y * unit},
@@ -13654,9 +13571,9 @@ var _user$project$View$draw_bullet = F4(
 	});
 var _user$project$View$draw_bullets = F3(
 	function (model, mycolor, bullets) {
-		var _p19 = model.window;
-		var w = _p19._0;
-		var h = _p19._1;
+		var _p20 = model.window;
+		var w = _p20._0;
+		var h = _p20._1;
 		var unit = model.unit;
 		var window = {ctor: '_Tuple2', _0: w / unit, _1: h / unit};
 		var blackline = function (n) {
@@ -13693,9 +13610,9 @@ var _user$project$View$view = function (model) {
 							_elm_lang$core$Basics_ops['++'],
 							_user$project$View$draw_minions(model),
 							_user$project$View$draw_player(model))))));
-		var _p20 = model.window;
-		var w = _p20._0;
-		var h = _p20._1;
+		var _p21 = model.window;
+		var w = _p21._0;
+		var h = _p21._1;
 		return _evancz$elm_graphics$Element$toHtml(
 			A3(
 				_evancz$elm_graphics$Collage$collage,
@@ -13711,61 +13628,10 @@ var _user$project$Update$distance = F2(
 		return _elm_lang$core$Basics$sqrt(
 			Math.pow(_p2._0 - _p3._0, 2) + Math.pow(_p2._1 - _p3._1, 2));
 	});
-var _user$project$Update$not_collided_b_b = F2(
-	function (a, b) {
-		return _elm_lang$core$Native_Utils.cmp(
-			A2(_user$project$Update$distance, a.pos, b.pos),
-			a.r + b.r) > 0;
-	});
-var _user$project$Update$not_collided_b_bs = F2(
-	function (bullet, bullets) {
-		return A2(
-			_elm_lang$core$List$all,
-			_user$project$Update$not_collided_b_b(bullet),
-			bullets);
-	});
-var _user$project$Update$not_collided_o_b = F2(
-	function (a, b) {
-		return _elm_lang$core$Native_Utils.cmp(
-			A2(_user$project$Update$distance, a.pos, b.pos),
-			a.r + b.r) > 0;
-	});
-var _user$project$Update$not_collided_o_bs = F2(
-	function (obj, bullets) {
-		return A2(
-			_elm_lang$core$List$all,
-			_user$project$Update$not_collided_o_b(obj),
-			bullets);
-	});
-var _user$project$Update$not_collided_b_o = F2(
-	function (a, b) {
-		return _elm_lang$core$Native_Utils.cmp(
-			A2(_user$project$Update$distance, a.pos, b.pos),
-			a.r + b.r) > 0;
-	});
-var _user$project$Update$not_collided_b_os = F2(
-	function (bullet, objs) {
-		return A2(
-			_elm_lang$core$List$all,
-			_user$project$Update$not_collided_b_o(bullet),
-			objs);
-	});
-var _user$project$Update$not_collided_o_o = F2(
-	function (a, b) {
-		return _elm_lang$core$Native_Utils.cmp(
-			A2(_user$project$Update$distance, a.pos, b.pos),
-			a.r + b.r) > 0;
-	});
-var _user$project$Update$not_collided_o_os = F2(
-	function (obj, objs) {
-		return A2(
-			_elm_lang$core$List$all,
-			_user$project$Update$not_collided_o_o(obj),
-			objs);
-	});
 var _user$project$Update$handle_bullet_collision = F3(
 	function (bullets, objs, bullet) {
 		var r = bullet.r;
+		var invincibility = bullet.invincibility;
 		var pos = bullet.pos;
 		var hp_offset = _elm_lang$core$List$sum(
 			A2(
@@ -13796,11 +13662,12 @@ var _user$project$Update$handle_bullet_collision = F3(
 					objs)));
 		return _elm_lang$core$Native_Utils.update(
 			bullet,
-			{hp: bullet.hp - hp_offset});
+			{hp: bullet.hp - (hp_offset * (1 - invincibility))});
 	});
 var _user$project$Update$handle_object_collision = F3(
 	function (bullets, objs, obj) {
 		var r = obj.r;
+		var invincibility = obj.invincibility;
 		var pos = obj.pos;
 		var hp_offset = _elm_lang$core$List$sum(
 			A2(
@@ -13831,11 +13698,7 @@ var _user$project$Update$handle_object_collision = F3(
 					objs)));
 		return _elm_lang$core$Native_Utils.update(
 			obj,
-			{hp: obj.hp - hp_offset});
-	});
-var _user$project$Update$is_player_collided = F3(
-	function (player, minions, bullets) {
-		return !(A2(_user$project$Update$not_collided_o_bs, player, bullets) && A2(_user$project$Update$not_collided_o_os, player, minions));
+			{hp: obj.hp - (hp_offset * (1 - invincibility))});
 	});
 var _user$project$Update$create_bullet = F2(
 	function (model, obj) {
@@ -13867,7 +13730,8 @@ var _user$project$Update$create_bullet = F2(
 			v: new_v,
 			r: obj.bullet_r,
 			lifespan: obj.bullet_lifespan,
-			hp: Math.pow(obj.bullet_r, 2)
+			hp: Math.pow(obj.bullet_r, 2),
+			invincibility: obj.bullet_invincibility
 		};
 	});
 var _user$project$Update$update_bullet = F3(
@@ -14348,11 +14212,23 @@ var _user$project$Update$update = F2(
 						{player: new_player}),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
-			case 'PlayerBulletPenetrate':
+			case 'PlayerBulletInvincibility':
 				var player = model.player;
-				var new_player = _elm_lang$core$Native_Utils.update(
-					player,
-					{bullet_penetrate: !player.bullet_penetrate});
+				var new_player = function () {
+					var _p45 = _elm_lang$core$String$toFloat(_p34._0);
+					if (_p45.ctor === 'Ok') {
+						return _elm_lang$core$Native_Utils.update(
+							player,
+							{
+								bullet_invincibility: A2(
+									_elm_lang$core$Basics$max,
+									0,
+									A2(_elm_lang$core$Basics$min, 1, _p45._0))
+							});
+					} else {
+						return player;
+					}
+				}();
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
@@ -14360,11 +14236,23 @@ var _user$project$Update$update = F2(
 						{player: new_player}),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
-			case 'PlayerInvincible':
+			case 'PlayerInvincibility':
 				var player = model.player;
-				var new_player = _elm_lang$core$Native_Utils.update(
-					player,
-					{invincible: !player.invincible});
+				var new_player = function () {
+					var _p46 = _elm_lang$core$String$toFloat(_p34._0);
+					if (_p46.ctor === 'Ok') {
+						return _elm_lang$core$Native_Utils.update(
+							player,
+							{
+								invincibility: A2(
+									_elm_lang$core$Basics$max,
+									0,
+									A2(_elm_lang$core$Basics$min, 1, _p46._0))
+							});
+					} else {
+						return player;
+					}
+				}();
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
@@ -14373,14 +14261,14 @@ var _user$project$Update$update = F2(
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
 			case 'MinionMax':
-				var _p45 = _elm_lang$core$String$toInt(_p34._0);
-				if (_p45.ctor === 'Ok') {
+				var _p47 = _elm_lang$core$String$toInt(_p34._0);
+				if (_p47.ctor === 'Ok') {
 					return {
 						ctor: '_Tuple2',
 						_0: _elm_lang$core$Native_Utils.update(
 							model,
 							{
-								minion_max: A2(_elm_lang$core$Basics$max, 0, _p45._0)
+								minion_max: A2(_elm_lang$core$Basics$max, 0, _p47._0)
 							}),
 						_1: _elm_lang$core$Platform_Cmd$none
 					};
@@ -14390,9 +14278,9 @@ var _user$project$Update$update = F2(
 			case 'MinionR':
 				var minion = model.minion;
 				var new_minion = function () {
-					var _p46 = _elm_lang$core$String$toFloat(_p34._0);
-					if (_p46.ctor === 'Ok') {
-						var v = A2(_elm_lang$core$Basics$max, 1, _p46._0);
+					var _p48 = _elm_lang$core$String$toFloat(_p34._0);
+					if (_p48.ctor === 'Ok') {
+						var v = A2(_elm_lang$core$Basics$max, 1, _p48._0);
 						return _elm_lang$core$Native_Utils.update(
 							minion,
 							{
@@ -14413,12 +14301,12 @@ var _user$project$Update$update = F2(
 			case 'MinionVMax':
 				var minion = model.minion;
 				var new_minion = function () {
-					var _p47 = _elm_lang$core$String$toFloat(_p34._0);
-					if (_p47.ctor === 'Ok') {
+					var _p49 = _elm_lang$core$String$toFloat(_p34._0);
+					if (_p49.ctor === 'Ok') {
 						return _elm_lang$core$Native_Utils.update(
 							minion,
 							{
-								v_max: A2(_elm_lang$core$Basics$max, 1.0e-3, _p47._0)
+								v_max: A2(_elm_lang$core$Basics$max, 1.0e-3, _p49._0)
 							});
 					} else {
 						return minion;
@@ -14434,12 +14322,12 @@ var _user$project$Update$update = F2(
 			case 'MinionCDMax':
 				var minion = model.minion;
 				var new_minion = function () {
-					var _p48 = _elm_lang$core$String$toFloat(_p34._0);
-					if (_p48.ctor === 'Ok') {
+					var _p50 = _elm_lang$core$String$toFloat(_p34._0);
+					if (_p50.ctor === 'Ok') {
 						return _elm_lang$core$Native_Utils.update(
 							minion,
 							{
-								cd_max: A2(_elm_lang$core$Basics$max, 1.0e-3, _p48._0)
+								cd_max: A2(_elm_lang$core$Basics$max, 1.0e-3, _p50._0)
 							});
 					} else {
 						return minion;
@@ -14455,12 +14343,12 @@ var _user$project$Update$update = F2(
 			case 'MinionBulletR':
 				var minion = model.minion;
 				var new_minion = function () {
-					var _p49 = _elm_lang$core$String$toFloat(_p34._0);
-					if (_p49.ctor === 'Ok') {
+					var _p51 = _elm_lang$core$String$toFloat(_p34._0);
+					if (_p51.ctor === 'Ok') {
 						return _elm_lang$core$Native_Utils.update(
 							minion,
 							{
-								bullet_r: A2(_elm_lang$core$Basics$max, 0, _p49._0)
+								bullet_r: A2(_elm_lang$core$Basics$max, 0, _p51._0)
 							});
 					} else {
 						return minion;
@@ -14476,12 +14364,12 @@ var _user$project$Update$update = F2(
 			case 'MinionBulletV':
 				var minion = model.minion;
 				var new_minion = function () {
-					var _p50 = _elm_lang$core$String$toFloat(_p34._0);
-					if (_p50.ctor === 'Ok') {
+					var _p52 = _elm_lang$core$String$toFloat(_p34._0);
+					if (_p52.ctor === 'Ok') {
 						return _elm_lang$core$Native_Utils.update(
 							minion,
 							{
-								bullet_v: A2(_elm_lang$core$Basics$max, 1.0e-3, _p50._0)
+								bullet_v: A2(_elm_lang$core$Basics$max, 1.0e-3, _p52._0)
 							});
 					} else {
 						return minion;
@@ -14497,12 +14385,12 @@ var _user$project$Update$update = F2(
 			case 'MinionBulletMax':
 				var minion = model.minion;
 				var new_minion = function () {
-					var _p51 = _elm_lang$core$String$toInt(_p34._0);
-					if (_p51.ctor === 'Ok') {
+					var _p53 = _elm_lang$core$String$toInt(_p34._0);
+					if (_p53.ctor === 'Ok') {
 						return _elm_lang$core$Native_Utils.update(
 							minion,
 							{
-								bullet_max: A2(_elm_lang$core$Basics$max, 0, _p51._0)
+								bullet_max: A2(_elm_lang$core$Basics$max, 0, _p53._0)
 							});
 					} else {
 						return minion;
@@ -14518,12 +14406,12 @@ var _user$project$Update$update = F2(
 			case 'MinionBulletLifespan':
 				var minion = model.minion;
 				var new_minion = function () {
-					var _p52 = _elm_lang$core$String$toFloat(_p34._0);
-					if (_p52.ctor === 'Ok') {
+					var _p54 = _elm_lang$core$String$toFloat(_p34._0);
+					if (_p54.ctor === 'Ok') {
 						return _elm_lang$core$Native_Utils.update(
 							minion,
 							{
-								bullet_lifespan: A2(_elm_lang$core$Basics$max, 0, _p52._0)
+								bullet_lifespan: A2(_elm_lang$core$Basics$max, 0, _p54._0)
 							});
 					} else {
 						return minion;
@@ -14539,15 +14427,15 @@ var _user$project$Update$update = F2(
 			case 'MinionBulletSpreadRatio':
 				var minion = model.minion;
 				var new_minion = function () {
-					var _p53 = _elm_lang$core$String$toFloat(_p34._0);
-					if (_p53.ctor === 'Ok') {
+					var _p55 = _elm_lang$core$String$toFloat(_p34._0);
+					if (_p55.ctor === 'Ok') {
 						return _elm_lang$core$Native_Utils.update(
 							minion,
 							{
 								bullet_spread_ratio: A2(
 									_elm_lang$core$Basics$max,
 									0,
-									A2(_elm_lang$core$Basics$min, 1, _p53._0))
+									A2(_elm_lang$core$Basics$min, 1, _p55._0))
 							});
 					} else {
 						return minion;
@@ -14563,11 +14451,11 @@ var _user$project$Update$update = F2(
 			case 'MinionBulletInertiaRatio':
 				var minion = model.minion;
 				var new_minion = function () {
-					var _p54 = _elm_lang$core$String$toFloat(_p34._0);
-					if (_p54.ctor === 'Ok') {
+					var _p56 = _elm_lang$core$String$toFloat(_p34._0);
+					if (_p56.ctor === 'Ok') {
 						return _elm_lang$core$Native_Utils.update(
 							minion,
-							{bullet_inertia_ratio: _p54._0});
+							{bullet_inertia_ratio: _p56._0});
 					} else {
 						return minion;
 					}
@@ -14579,11 +14467,23 @@ var _user$project$Update$update = F2(
 						{minion: new_minion}),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
-			case 'MinionBulletPenetrate':
+			case 'MinionBulletInvincibility':
 				var minion = model.minion;
-				var new_minion = _elm_lang$core$Native_Utils.update(
-					minion,
-					{bullet_penetrate: !minion.bullet_penetrate});
+				var new_minion = function () {
+					var _p57 = _elm_lang$core$String$toFloat(_p34._0);
+					if (_p57.ctor === 'Ok') {
+						return _elm_lang$core$Native_Utils.update(
+							minion,
+							{
+								bullet_invincibility: A2(
+									_elm_lang$core$Basics$max,
+									0,
+									A2(_elm_lang$core$Basics$min, 1, _p57._0))
+							});
+					} else {
+						return minion;
+					}
+				}();
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
@@ -14591,11 +14491,23 @@ var _user$project$Update$update = F2(
 						{minion: new_minion}),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
-			case 'MinionInvincible':
+			case 'MinionInvincibility':
 				var minion = model.minion;
-				var new_minion = _elm_lang$core$Native_Utils.update(
-					minion,
-					{invincible: !minion.invincible});
+				var new_minion = function () {
+					var _p58 = _elm_lang$core$String$toFloat(_p34._0);
+					if (_p58.ctor === 'Ok') {
+						return _elm_lang$core$Native_Utils.update(
+							minion,
+							{
+								invincibility: A2(
+									_elm_lang$core$Basics$max,
+									0,
+									A2(_elm_lang$core$Basics$min, 1, _p58._0))
+							});
+					} else {
+						return minion;
+					}
+				}();
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
@@ -14620,15 +14532,15 @@ var _user$project$Update$update = F2(
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
 			case 'MouseMove':
-				var _p56 = _p34._0;
+				var _p60 = _p34._0;
 				var player = model.player;
-				var _p55 = model.window;
-				var w = _p55._0;
-				var h = _p55._1;
+				var _p59 = model.window;
+				var w = _p59._0;
+				var h = _p59._1;
 				var pos = {
 					ctor: '_Tuple2',
-					_0: _elm_lang$core$Basics$toFloat(_p56.x) - (w / 2),
-					_1: _elm_lang$core$Basics$toFloat(_p56.y) - (h / 2)
+					_0: _elm_lang$core$Basics$toFloat(_p60.x) - (w / 2),
+					_1: _elm_lang$core$Basics$toFloat(_p60.y) - (h / 2)
 				};
 				var new_player = _elm_lang$core$Native_Utils.update(
 					player,
@@ -14643,21 +14555,21 @@ var _user$project$Update$update = F2(
 			case 'KeyDown':
 				var ch = _elm_lang$core$Char$fromCode(_p34._0);
 				var new_paused = function () {
-					var _p57 = ch;
-					if (_p57.valueOf() === 'P') {
+					var _p61 = ch;
+					if (_p61.valueOf() === 'P') {
 						return !model.paused;
 					} else {
 						return model.paused;
 					}
 				}();
 				var player = model.player;
-				var _p58 = player.a;
-				var ax = _p58._0;
-				var ay = _p58._1;
+				var _p62 = player.a;
+				var ax = _p62._0;
+				var ay = _p62._1;
 				var a_max = player.a_max;
 				var new_a = function () {
-					var _p59 = ch;
-					switch (_p59.valueOf()) {
+					var _p63 = ch;
+					switch (_p63.valueOf()) {
 						case 'W':
 							return {
 								ctor: '_Tuple2',
@@ -14710,12 +14622,12 @@ var _user$project$Update$update = F2(
 				};
 			case 'KeyUp':
 				var player = model.player;
-				var _p60 = player.a;
-				var ax = _p60._0;
-				var ay = _p60._1;
+				var _p64 = player.a;
+				var ax = _p64._0;
+				var ay = _p64._1;
 				var new_a = function () {
-					var _p61 = _elm_lang$core$Char$fromCode(_p34._0);
-					switch (_p61.valueOf()) {
+					var _p65 = _elm_lang$core$Char$fromCode(_p34._0);
+					switch (_p65.valueOf()) {
 						case 'W':
 							return {
 								ctor: '_Tuple2',
@@ -14755,14 +14667,14 @@ var _user$project$Update$update = F2(
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
 			case 'WindowResize':
-				var _p63 = _p34._0;
-				var _p62 = {
+				var _p67 = _p34._0;
+				var _p66 = {
 					ctor: '_Tuple2',
-					_0: _elm_lang$core$Basics$toFloat(_p63.width),
-					_1: _elm_lang$core$Basics$toFloat(_p63.height)
+					_0: _elm_lang$core$Basics$toFloat(_p67.width),
+					_1: _elm_lang$core$Basics$toFloat(_p67.height)
 				};
-				var w = _p62._0;
-				var h = _p62._1;
+				var w = _p66._0;
+				var h = _p66._1;
 				var $switch = (_elm_lang$core$Native_Utils.cmp(h, w) < 0) ? true : false;
 				var ratio = $switch ? (w / h) : (h / w);
 				var seg_h = h / ($switch ? 10 : _elm_lang$core$Basics$toFloat(
@@ -14800,30 +14712,30 @@ var _user$project$Update$update = F2(
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
 			case 'GameUpdate':
-				var _p64 = _user$project$Update$update_player(model);
-				var temp_player = _p64._0;
-				var offset = _p64._1;
+				var _p68 = _user$project$Update$update_player(model);
+				var temp_player = _p68._0;
+				var offset = _p68._1;
 				var temp_player_bullets = A2(_user$project$Update$update_player_bullets, offset, model);
 				var temp_minion_bullets = A2(_user$project$Update$update_minion_bullets, offset, model);
 				var temp_minions = A2(_user$project$Update$update_minions, offset, model);
-				var new_grid = A2(_user$project$Update$update_grid, model, offset);
-				var minion = model.minion;
-				var player = model.player;
-				var new_player_bullets = player.bullet_penetrate ? temp_player_bullets : A2(
+				var new_player_bullets = A2(
 					_elm_lang$core$List$filter,
-					function (_p65) {
-						var _p66 = _p65;
-						return (_elm_lang$core$Native_Utils.cmp(_p66.lifespan, 0) > 0) && (_elm_lang$core$Native_Utils.cmp(_p66.hp, 0) > 0);
+					function (_p69) {
+						var _p70 = _p69;
+						return (_elm_lang$core$Native_Utils.cmp(_p70.lifespan, 0) > 0) && (_elm_lang$core$Native_Utils.cmp(_p70.hp, 0) > 0);
 					},
 					A2(
 						_elm_lang$core$List$map,
 						A2(_user$project$Update$handle_bullet_collision, temp_minion_bullets, temp_minions),
 						temp_player_bullets));
-				var new_minion_bullets = minion.bullet_penetrate ? temp_minion_bullets : A2(
+				var new_grid = A2(_user$project$Update$update_grid, model, offset);
+				var minion = model.minion;
+				var player = model.player;
+				var new_minion_bullets = A2(
 					_elm_lang$core$List$filter,
-					function (_p67) {
-						var _p68 = _p67;
-						return (_elm_lang$core$Native_Utils.cmp(_p68.lifespan, 0) > 0) && (_elm_lang$core$Native_Utils.cmp(_p68.hp, 0) > 0);
+					function (_p71) {
+						var _p72 = _p71;
+						return (_elm_lang$core$Native_Utils.cmp(_p72.lifespan, 0) > 0) && (_elm_lang$core$Native_Utils.cmp(_p72.hp, 0) > 0);
 					},
 					A2(
 						_elm_lang$core$List$map,
@@ -14840,11 +14752,11 @@ var _user$project$Update$update = F2(
 								_1: {ctor: '[]'}
 							}),
 						temp_minion_bullets));
-				var new_minions = minion.invincible ? temp_minions : A2(
+				var new_minions = A2(
 					_elm_lang$core$List$filter,
-					function (_p69) {
-						var _p70 = _p69;
-						return _elm_lang$core$Native_Utils.cmp(_p70.hp, 0) > 0;
+					function (_p73) {
+						var _p74 = _p73;
+						return _elm_lang$core$Native_Utils.cmp(_p74.hp, 0) > 0;
 					},
 					A2(
 						_elm_lang$core$List$map,
@@ -14861,7 +14773,7 @@ var _user$project$Update$update = F2(
 								_1: {ctor: '[]'}
 							}),
 						temp_minions));
-				var new_player = player.invincible ? temp_player : function (n) {
+				var new_player = function (n) {
 					return _elm_lang$core$Native_Utils.update(
 						n,
 						{pos: player.pos});
@@ -14875,9 +14787,9 @@ var _user$project$Update$update = F2(
 							{
 								pos: {ctor: '_Tuple2', _0: 0, _1: 0}
 							})));
-				var new_paused = function (_p71) {
-					var _p72 = _p71;
-					return _elm_lang$core$Native_Utils.cmp(_p72.hp, 0) < 1;
+				var new_paused = function (_p75) {
+					var _p76 = _p75;
+					return _elm_lang$core$Native_Utils.cmp(_p76.hp, 0) < 1;
 				}(new_player);
 				var new_dt = _p34._0 / 1000;
 				return new_paused ? {

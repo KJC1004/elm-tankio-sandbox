@@ -85,17 +85,18 @@ draw_grid : Model -> List Form
 draw_grid {window,grid} =
   let
     (w, h) = window
+    (hw,hh, nhw, nhh) = (w/2, h/2, -w/2, -h/2)
     (row,col) = grid
     row_view =  
       row 
-        |> List.map ( \n -> n - h/2 )
-        |> List.map ( \n -> segment (-w/2,n) (w/2,n) )
+        |> List.map ( \n -> n - hh )
+        |> List.map ( \n -> segment (nhw,n) (hw,n) )
         |> List.map ( traced (solid Color.darkGrey) )
 
     col_view = 
       col 
-        |> List.map ( \n -> n - w/2 )
-        |> List.map ( \n -> segment (n,-h/2) (n,h/2) )
+        |> List.map ( \n -> n - hw )
+        |> List.map ( \n -> segment (n,nhh) (n,hh) )
         |> List.map ( traced (solid Color.darkGrey) )
   in
     row_view ++ col_view
@@ -192,19 +193,6 @@ tr_input model str func msg0 msg1 =
       , td [] [minion |> func |> toString |> Html.text]
       , td [] [input [onInput msg1] []]
       ]
-tr_checkbox : Model -> String -> (GameObj -> Bool) -> (String -> Msg) -> (String -> Msg) -> Html Msg
-tr_checkbox model str func msg0 msg1 =
-  let 
-    player = model.player
-    minion = model.minion
-  in
-    tr []
-      [ td [] [] 
-      , td [] [input [type_ "checkbox", checked (func player), onInput msg0] []]
-      , td [] [Html.text str]
-      , td [] [input [type_ "checkbox", checked (func minion), onInput msg1] []]
-      , td [] []
-      ]
 tableStyles : List (Attribute msg)
 tableStyles = 
   [ align "center"
@@ -249,8 +237,8 @@ pause_view model =
       , tr_input model "Bullet lifespan (sec)" .bullet_lifespan PlayerBulletLifespan MinionBulletLifespan
       , tr_input model "Bullet Spread Ratio (0~1)" .bullet_spread_ratio PlayerBulletSpreadRatio MinionBulletSpreadRatio
       , tr_input model "Bullet Inertia Ratio " .bullet_inertia_ratio PlayerBulletInertiaRatio MinionBulletInertiaRatio
-      , tr_checkbox model "Bullet Penetrate" .bullet_penetrate PlayerBulletPenetrate MinionBulletPenetrate
-      , tr_checkbox model "Invincible" .invincible PlayerInvincible MinionInvincible
+      , tr_input model "Bullet Invincibility (0~1)" .bullet_invincibility PlayerBulletInvincibility MinionBulletInvincibility
+      , tr_input model "Invincibility (0~1)" .invincibility PlayerInvincibility MinionInvincibility
       , tr [] []
       , tr [] 
         [ td [colspan 2] [Html.text <| "W,A,S,D(move)"]
